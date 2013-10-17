@@ -30,6 +30,8 @@ SRC_URI += "file://configure-targets.patch \
             file://debian/debian-targets.patch \
             file://openssl_fix_for_x32.patch \
             file://find.pl \
+	    file://Fix-documentation-build-errors-with-Perl-5.18-pod2ma.patch \
+	    file://doc-extra-fix-for-pod2man.patch \
            "
 
 SRC_URI[md5sum] = "cbe4ac0d8f598680f68a951e04b0996b"
