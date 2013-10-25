@@ -9,6 +9,7 @@ PR = "r1"
 
 SRC_URI = "${SOURCEFORGE_MIRROR}/check/check-${PV}.tar.gz \
            file://libcheck_fix_for_automake-1.12.patch \
+           file://ignore_automake_warning.patch \
           "
 
 SRC_URI[md5sum] = "f3702f2fcfc19ce3f62dca66c241a168"
