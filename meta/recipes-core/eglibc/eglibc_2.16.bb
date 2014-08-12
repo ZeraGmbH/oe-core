@@ -33,6 +33,7 @@ SRC_URI = "http://downloads.yoctoproject.org/releases/eglibc/eglibc-${PV}-svnr21
            file://tzselect-sh.patch \
            file://tzselect-awk.patch \
            file://0001-eglibc-run-libm-err-tab.pl-with-specific-dirs-in-S.patch \
+           file://remove_hsep_and_vsep_from_info_pages.patch \
           "
 
 SRC_URI[tarball.md5sum] = "88894fa6e10e58e85fbd8134b8e486a8"
