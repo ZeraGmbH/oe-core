@@ -1,0 +1,36 @@
+From c31b182dc831145868c9225c1d8fa8d69cac18ad Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Andreas=20M=C3=BCller?= <schnitzeltony@googlemail.com>
+Date: Mon, 22 Sep 2014 17:08:08 +0200
+Subject: [PATCH] Fix build gcc 4.8 II
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+| line2addr.c: In function 'main':
+| line2addr.c:135:7: error: format '%a' expects argument of type 'float *', but argument 3 has type 'char **' [-Werror=format=]
+|        switch (sscanf (a.arg, "%a[^:]:%d", &a.file, &a.line))
+|        ^
+| cc1: all warnings being treated as errors
+| make[2]: *** [line2addr.o] Error 1
+
+Signed-off-by: Andreas Müller <schnitzeltony@googlemail.com>
+---
+ tests/line2addr.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tests/line2addr.c b/tests/line2addr.c
+index 1180062..5630da3 100644
+--- a/tests/line2addr.c
++++ b/tests/line2addr.c
+@@ -132,7 +132,7 @@ main (int argc, char *argv[])
+     {
+       struct args a = { .arg = argv[cnt] };
+ 
+-      switch (sscanf (a.arg, "%a[^:]:%d", &a.file, &a.line))
++      switch (sscanf (a.arg, "%m[^:]:%d", &a.file, &a.line))
+ 	{
+ 	default:
+ 	case 0:
+-- 
+1.8.3.1
+
