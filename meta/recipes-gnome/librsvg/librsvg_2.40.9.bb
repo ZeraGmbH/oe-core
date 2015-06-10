@@ -12,8 +12,6 @@ BBCLASSEXTEND = "native"
 
 inherit autotools pkgconfig gnomebase gtk-doc pixbufcache
 
-GNOME_COMPRESS_TYPE = "xz"
-
 SRC_URI += "file://gtk-option.patch"
 
 SRC_URI[archive.md5sum] = "31df15e3beaa8fbbf538ca3c52b400d2"
