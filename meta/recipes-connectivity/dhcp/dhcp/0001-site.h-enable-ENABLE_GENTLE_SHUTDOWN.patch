@@ -1,0 +1,38 @@
+From 4466bdf313825c49add5833b4fd28f7573a17705 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Andreas=20M=C3=BCller?= <schnitzeltony@googlemail.com>
+Date: Wed, 2 Sep 2015 14:37:39 +0200
+Subject: [PATCH] site.h: enable ENABLE_GENTLE_SHUTDOWN
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Under control of networkmanager systemd tries to stop dhclient on shutdown by
+sending SIGTERM. This does not work and after a timeout systemd terminates
+dhclient by sending SIGKILL. This causes a delay of ~10s at shutdown.
+
+[ 5778.268022] systemd-shutdown[1]: Sending SIGTERM to remaining processes...
+[ 5778.293797] systemd-journald[131]: Received SIGTERM from PID 1 (systemd-shutdow).
+[ 5788.305137] systemd-shutdown[1]: Sending SIGKILL to remaining processes...
+[ 5788.339046] systemd-shutdown[1]: Sending SIGKILL to PID 11829 (dhclient).
+
+Signed-off-by: Andreas Müller <schnitzeltony@googlemail.com>
+---
+ includes/site.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/includes/site.h b/includes/site.h
+index 73fa4e8..9c33de3 100644
+--- a/includes/site.h
++++ b/includes/site.h
+@@ -280,7 +280,7 @@
+    situations.  We plan to revisit this feature and may
+    make non-backwards compatible changes including the
+    removal of this define.  Use at your own risk.  */
+-/* #define ENABLE_GENTLE_SHUTDOWN */
++#define ENABLE_GENTLE_SHUTDOWN
+ 
+ /* Include old error codes.  This is provided in case you
+    are building an external program similar to omshell for
+-- 
+2.1.0
+
