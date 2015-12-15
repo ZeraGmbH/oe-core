@@ -24,5 +24,3 @@ do_configure_prepend() {
     rm -rf ${S}/buildlib/config.sub
     rm -rf ${S}/buildlib/config.guess
 }
-
-FILES_${PN}-dbg += "${libdir}/apt/methods/.debug/"
