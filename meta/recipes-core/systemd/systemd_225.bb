@@ -228,7 +228,7 @@ SYSTEMD_PACKAGES = "${PN}-binfmt"
 SYSTEMD_SERVICE_${PN}-binfmt = "systemd-binfmt.service"
 
 USERADD_PACKAGES = "${PN}"
-USERADD_PARAM_${PN} += "--system systemd-journal-gateway; --system systemd-timesync"
+USERADD_PARAM_${PN} += "--system -d / -M --shell /bin/nologin systemd-journal-gateway; --system -d / -M --shell /bin/nologin systemd-timesync;"
 GROUPADD_PARAM_${PN} = "-r lock; -r systemd-journal"
 
 FILES_${PN}-analyze = "${bindir}/systemd-analyze"
