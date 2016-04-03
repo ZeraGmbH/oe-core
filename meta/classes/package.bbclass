@@ -392,6 +392,13 @@ def copydebugsources(debugsrcdir, d):
         if retval:
             bb.fatal("debugsrc symlink fixup failed with exit code %s (cmd was %s)" % (retval, cmd))
 
+        # cpio --no-preserve-owner does not create the destination files with
+        # owner root even when run under pseudo, chown them explicitely.
+        cmd = "find '%s%s' -not -uid 0 -exec chown 0:0 {} \;" % (dvar, debugsrcdir)
+        (retval, output) = oe.utils.getstatusoutput(cmd)
+        if retval:
+            bb.fatal("cpio --no-preserve-owner fixup failed with exit code %s (cmd was %s)" % (retval, cmd))
+
         # The copy by cpio may have resulted in some empty directories!  Remove these
         cmd = "find %s%s -empty -type d -delete" % (dvar, debugsrcdir)
         (retval, output) = oe.utils.getstatusoutput(cmd)
