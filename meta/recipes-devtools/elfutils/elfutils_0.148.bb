@@ -35,6 +35,7 @@ SRC_URI += "\
 	file://elfutils-ar-c-fix-num-passed-to-memset.patch \
 	file://fix-build-gcc-4.8.patch \
 	file://fix-build-gcc-4.8-II.patch \
+        file://gcc6.patch \
 "
 # Only apply when building uclibc based target recipe
 SRC_URI_append_libc-uclibc = " file://uclibc-support.patch"
