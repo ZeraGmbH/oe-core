@@ -32,6 +32,7 @@ SRC_URI += "file://configure-targets.patch \
             file://find.pl \
 	    file://Fix-documentation-build-errors-with-Perl-5.18-pod2ma.patch \
 	    file://doc-extra-fix-for-pod2man.patch \
+            file://openssl-util-perlpath.pl-cwd.patch \
            "
 
 SRC_URI[md5sum] = "cbe4ac0d8f598680f68a951e04b0996b"
