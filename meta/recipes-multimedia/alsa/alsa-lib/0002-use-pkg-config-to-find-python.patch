@@ -1,0 +1,36 @@
+From ab5010c7098e7d580189553ac30c6b5d85950fe3 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Andreas=20M=C3=BCller?= <schnitzeltony@googlemail.com>
+Date: Mon, 23 Jan 2017 14:13:23 +0100
+Subject: [PATCH] use pkg-config to find python
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Upstream-Status: Inappropriate [embedded specific]
+
+Signed-off-by: Andreas Müller <schnitzeltony@googlemail.com>
+---
+ configure.ac | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/configure.ac b/configure.ac
+index 83f0ac3..264188d 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -388,11 +388,11 @@ if test "$build_python" = "yes"; then
+   AC_ARG_WITH(pythonlibs,
+     AS_HELP_STRING([--with-pythonlibs=ldflags],
+       [specify python libraries (-lpthread -lm -ldl -lpython2.4)]),
+-    pythonlibs="$withval", pythonlibs=`python-config --libs`)
++    pythonlibs="$withval", pythonlibs=`pkg-config --libs python`)
+   AC_ARG_WITH(pythonincludes,
+     AS_HELP_STRING([--with-pythonincludes=Cflags],
+       [specify python C header files (-I/usr/include/python)]),
+-    pythonincludes="$withval", pythonincludes=`python-config --includes`)
++    pythonincludes="$withval", pythonincludes=`pkg-config --cflags python`)
+   if test -z "$pythonlibs"; then
+     echo "Unable to determine python libraries! Probably python-config is not"
+     echo "available on this system. Please, use --with-pythonlibs and"
+-- 
+2.7.4
+
