@@ -1,0 +1,73 @@
+From bf7d04ae83dfb80d035670a6effe446e6b9e6249 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Andreas=20M=C3=BCller?= <schnitzeltony@gmail.com>
+Date: Thu, 22 Nov 2018 15:18:03 +0100
+Subject: [PATCH] fallthrough
+
+GCC7 adds -Wimplicit-fallthrough to warn when a switch case falls through,
+however this causes warnings (which are promoted to errors) with the elfutils
+patches from Debian for mips and parisc, which use fallthrough's by design.
+
+Explicitly mark the intentional fallthrough switch cases with a comment to
+disable the warnings where the fallthrough behaviour is desired.
+
+Upstream-Status: Pending [debian]
+Signed-off-by: Joshua Lock <joshua.g.lock@intel.com>
+
+---
+ backends/parisc_retval.c | 4 ++--
+ backends/mips_retval.c | 2 +-
+ src/elflint.c | 2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/backends/parisc_retval.c b/backends/parisc_retval.c
+index 592a702..b1c6696 100644
+--- a/backends/parisc_retval.c
++++ b/backends/parisc_retval.c
+@@ -167,7 +167,7 @@ parisc_return_value_location_ (Dwarf_Die *functypedie, const Dwarf_Op **locp, in
+ 
+ 	/* Else fall through.  */
+       }
+-
++      /* fallthrough */
+     case DW_TAG_structure_type:
+     case DW_TAG_class_type:
+     case DW_TAG_union_type:
+@@ -189,7 +189,7 @@ parisc_return_value_location_ (Dwarf_Die *functypedie, const Dwarf_Op **locp, in
+         *locp = loc_aggregate;
+         return nloc_aggregate;
+ #endif
+-	/* fall through.  */
++	/* fallthrough */
+       }
+     }
+ 
+diff --git a/backends/mips_retval.c b/backends/mips_retval.c
+index 33f12a7..b25b1b7 100644
+--- a/backends/mips_retval.c
++++ b/backends/mips_retval.c
+@@ -300,7 +300,7 @@ mips_return_value_location (Dwarf_Die *functypedie, const Dwarf_Op **locp)
+ 
+ 	/* Else fall through. Shouldn't happen though (at least with gcc) */
+       }
+-
++      /* fallthrough */
+     case DW_TAG_structure_type:
+     case DW_TAG_class_type:
+     case DW_TAG_union_type:
+diff --git a/src/elflint.c b/src/elflint.c
+index 7db5377..e6feeb6 100644
+--- a/src/elflint.c
++++ b/src/elflint.c
+@@ -3735,8 +3735,8 @@ section [%2zu] '%s': merge flag set but entry size is zero\n"),
+ 
+ 	    case SHT_NOBITS:
+ 	      if (is_debuginfo)
+-	      /* Fallthrough */
+ 		break;
++	      /* Fallthrough */
+ 	    default:
+ 	      ERROR (gettext ("\
+ section [%2zu] '%s' has unexpected type %d for an executable section\n"),
+-- 
+2.14.5
+

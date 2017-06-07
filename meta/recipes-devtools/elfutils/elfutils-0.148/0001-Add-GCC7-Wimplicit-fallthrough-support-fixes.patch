@@ -1,0 +1,237 @@
+From 09949994e76eea3c1230a5c88ffa8fdf588b120f Mon Sep 17 00:00:00 2001
+From: Mark Wielaard <mjw@redhat.com>
+Date: Wed, 2 Nov 2016 13:29:26 +0100
+Subject: [PATCH] Add GCC7 -Wimplicit-fallthrough support/fixes.
+
+GCC7 will have a new -Wimplicit-fallthrough warning. It did catch one
+small buglet in elflint option procession. So it seems useful to enable
+to make sure all swatch case fallthroughs are deliberate.
+
+Add configure check to detect whether gcc support -Wimplicit-fallthrough
+and enable it. Add fixes and explicit fallthrough comments where necessary.
+
+Signed-off-by: Mark Wielaard <mjw@redhat.com>
+
+Upstream-Status: Backport
+Upstream-Commit: a3cc8182b2ae05290b0eafa74b70746d7befc0e4
+---
+ backends/alpha_retval.c    | 4 +---
+ backends/i386_regs.c       | 1 +
+ backends/i386_retval.c     | 3 +--
+ backends/linux-core-note.c | 4 ++--
+ backends/ppc_regs.c        | 1 +
+ backends/x86_64_regs.c     | 1 +
+ libcpu/i386_disasm.c       | 2 +-
+ libdw/cfi.c                | 2 ++
+ libdw/encoded-value.h      | 1 +
+ libdwfl/dwfl_report_elf.c  | 1 +
+ src/addr2line.c            | 1 +
+ src/elflint.c              | 4 +++-
+ src/objdump.c              | 4 +++-
+ 13 files changed, 19 insertions(+), 10 deletions(-)
+
+diff --git a/backends/alpha_retval.c b/backends/alpha_retval.c
+index 57ba867..863a830 100644
+--- a/backends/alpha_retval.c
++++ b/backends/alpha_retval.c
+@@ -142,9 +142,7 @@ alpha_return_value_location (Dwarf_Die *functypedie, const Dwarf_Op **locp)
+ 	    return nloc_intreg;
+ 	  }
+       }
+-
+-      /* Else fall through.  */
+-
++      /* Fallthrough */
+     case DW_TAG_structure_type:
+     case DW_TAG_class_type:
+     case DW_TAG_union_type:
+diff --git a/backends/i386_regs.c b/backends/i386_regs.c
+index 5cf0d81..da89ae9 100644
+--- a/backends/i386_regs.c
++++ b/backends/i386_regs.c
+@@ -89,6 +89,7 @@ i386_register_info (Ebl *ebl __attribute__ ((unused)),
+     case 5:
+     case 8:
+       *type = DW_ATE_address;
++      /* Fallthrough */
+     case 0 ... 3:
+     case 6 ... 7:
+       name[0] = 'e';
+diff --git a/backends/i386_retval.c b/backends/i386_retval.c
+index c3bab10..8b156c4 100644
+--- a/backends/i386_retval.c
++++ b/backends/i386_retval.c
+@@ -134,9 +134,8 @@ i386_return_value_location (Dwarf_Die *functypedie, const Dwarf_Op **locp)
+ 	  return nloc_intreg;
+ 	if (size <= 8)
+ 	  return nloc_intregpair;
+-
+-	/* Else fall through.  */
+       }
++    /* Fallthrough */
+ 
+     case DW_TAG_structure_type:
+     case DW_TAG_class_type:
+diff --git a/backends/linux-core-note.c b/backends/linux-core-note.c
+index 9d01219..2c52e0b 100644
+--- a/backends/linux-core-note.c
++++ b/backends/linux-core-note.c
+@@ -194,8 +194,8 @@ EBLHOOK(core_note) (nhdr, name, regs_offset, nregloc, reglocs, nitems, items)
+     case sizeof "CORE":
+       if (memcmp (name, "CORE", nhdr->n_namesz) == 0)
+ 	break;
+-      /* Buggy old Linux kernels didn't terminate "LINUX".
+-         Fall through.  */
++      /* Buggy old Linux kernels didn't terminate "LINUX".  */
++      /* Fall through. */
+ 
+     case sizeof "LINUX":
+       if (memcmp (name, "LINUX", nhdr->n_namesz) == 0)
+diff --git a/backends/ppc_regs.c b/backends/ppc_regs.c
+index 637c25d..13b58ed 100644
+--- a/backends/ppc_regs.c
++++ b/backends/ppc_regs.c
+@@ -138,6 +138,7 @@ ppc_register_info (Ebl *ebl __attribute__ ((unused)),
+       if (*bits == 32)
+ 	return stpcpy (name, "mq") + 1 - name;
+ 
++      /* Fallthrough */
+     case 102 ... 107:
+       name[0] = 's';
+       name[1] = 'p';
+diff --git a/backends/x86_64_regs.c b/backends/x86_64_regs.c
+index 8eb0d33..4de3048 100644
+--- a/backends/x86_64_regs.c
++++ b/backends/x86_64_regs.c
+@@ -84,6 +84,7 @@ x86_64_register_info (Ebl *ebl __attribute__ ((unused)),
+ 
+     case 6 ... 7:
+       *type = DW_ATE_address;
++      /* Fallthrough */
+     case 0 ... 5:
+       name[0] = 'r';
+       name[1] = baseregs[regno][0];
+diff --git a/libcpu/i386_disasm.c b/libcpu/i386_disasm.c
+index 0eabe0a..cee3240 100644
+--- a/libcpu/i386_disasm.c
++++ b/libcpu/i386_disasm.c
+@@ -788,7 +788,7 @@ i386_disasm (const uint8_t **startp, const uint8_t *end, GElf_Addr addr,
+ 			      ++param_start;
+ 			      break;
+ 			    }
+-
++			  /* Fallthrough */
+ 			default:
+ 			  assert (! "INVALID not handled");
+ 			  abort ();
+diff --git a/libdw/cfi.c b/libdw/cfi.c
+index aeb48e6..36335d5 100644
+--- a/libdw/cfi.c
++++ b/libdw/cfi.c
+@@ -143,6 +143,7 @@ execute_cfi (Dwarf_CFI *cache,
+ 
+ 	case DW_CFA_advance_loc1:
+ 	  operand = *program++;
++	  /* Fallthrough */
+ 	case DW_CFA_advance_loc + 0 ... DW_CFA_advance_loc + CFI_PRIMARY_MAX:
+ 	advance_loc:
+ 	  loc += operand * cie->code_alignment_factor;
+@@ -227,6 +228,7 @@ execute_cfi (Dwarf_CFI *cache,
+ 
+ 	case DW_CFA_offset_extended:
+ 	  get_uleb128 (operand, program);
++	  /* Fallthrough */
+ 	case DW_CFA_offset + 0 ... DW_CFA_offset + CFI_PRIMARY_MAX:
+ 	  get_uleb128 (offset, program);
+ 	  offset *= cie->data_alignment_factor;
+@@ -290,6 +292,7 @@ execute_cfi (Dwarf_CFI *cache,
+ 
+ 	case DW_CFA_restore_extended:
+ 	  get_uleb128 (operand, program);
++	  /* Fallthrough */
+ 	case DW_CFA_restore + 0 ... DW_CFA_restore + CFI_PRIMARY_MAX:
+ 
+ 	  if (unlikely (abi_cfi) && likely (opcode == DW_CFA_restore))
+diff --git a/libdw/encoded-value.h b/libdw/encoded-value.h
+index e118a1c..17190c8 100644
+--- a/libdw/encoded-value.h
++++ b/libdw/encoded-value.h
+@@ -82,6 +82,7 @@ encoded_value_size (const Elf_Data *data, const unsigned char e_ident[],
+ 	    if (*end++ & 0x80u)
+ 	      return end - p;
+ 	}
++      return 0;
+ 
+     default:
+       abort ();
+diff --git a/libdwfl/dwfl_report_elf.c b/libdwfl/dwfl_report_elf.c
+index 062a647..6973e52 100644
+--- a/libdwfl/dwfl_report_elf.c
++++ b/libdwfl/dwfl_report_elf.c
+@@ -186,6 +186,7 @@ __libdwfl_report_elf (Dwfl *dwfl, const char *name, const char *file_name,
+       /* An assigned base address is meaningless for these.  */
+       base = 0;
+ 
++      /* Fallthrough. */
+     case ET_DYN:
+     default:;
+       size_t phnum;
+diff --git a/src/addr2line.c b/src/addr2line.c
+index 48f017b..7b4455a 100644
+--- a/src/addr2line.c
++++ b/src/addr2line.c
+@@ -457,6 +457,7 @@ handle_address (const char *string, Dwfl *dwfl)
+ 	case 1:
+ 	  addr = 0;
+ 	  j = i;
++	  /* Fallthrough */
+ 	case 2:
+ 	  if (string[j] != '\0')
+ 	    break;
+diff --git a/src/elflint.c b/src/elflint.c
+index a25af97..7db5377 100644
+--- a/src/elflint.c
++++ b/src/elflint.c
+@@ -218,6 +218,7 @@ parse_opt (int key, char *arg __attribute__ ((unused)),
+ 
+     case 'd':
+       is_debuginfo = true;
++      break;
+ 
+     case ARGP_gnuld:
+       gnuld = true;
+@@ -3734,6 +3735,7 @@ section [%2zu] '%s': merge flag set but entry size is zero\n"),
+ 
+ 	    case SHT_NOBITS:
+ 	      if (is_debuginfo)
++	      /* Fallthrough */
+ 		break;
+ 	    default:
+ 	      ERROR (gettext ("\
+@@ -4036,7 +4038,7 @@ section [%2d] '%s': unknown core file note type %" PRIu32
+ 	    if (nhdr.n_namesz == sizeof "Linux"
+ 		&& !memcmp (data->d_buf + name_offset, "Linux", sizeof "Linux"))
+ 	      break;
+-
++	    /* Fallthrough */
+ 	  default:
+ 	    if (shndx == 0)
+ 	      ERROR (gettext ("\
+diff --git a/src/objdump.c b/src/objdump.c
+index 1234c79..dc94c20 100644
+--- a/src/objdump.c
++++ b/src/objdump.c
+@@ -238,7 +238,9 @@ parse_opt (int key, char *arg,
+ 		     program_invocation_short_name);
+ 	  exit (EXIT_FAILURE);
+ 	}
+-
++      /* We only use this for checking the number of arguments, we don't
++	 actually want to consume them.  */
++      /* Fallthrough */
+     default:
+       return ARGP_ERR_UNKNOWN;
+     }
+-- 
+2.14.5
+

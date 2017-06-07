@@ -17,15 +17,15 @@ SRC_URI[sha256sum] = "8aebfa4a745db21cf5429c9541fe482729b62efc7e53e9110151b4169f
 # http://ftp.de.debian.org/debian/pool/main/e/elfutils/elfutils_0.148-1.debian.tar.gz
 
 SRC_URI += "\
-        file://redhat-portability.diff \
-        file://redhat-robustify.diff \
-        file://hppa_backend.diff \
-        file://arm_backend.diff \
-        file://mips_backend.diff \
-        file://m68k_backend.diff \
-        file://do-autoreconf.diff \
-        file://testsuite-ignore-elflint.diff \
-        file://elf_additions.diff \
+    file://redhat-portability.diff \
+    file://redhat-robustify.diff \
+    file://hppa_backend.diff \
+    file://arm_backend.diff \
+    file://mips_backend.diff \
+    file://m68k_backend.diff \
+    file://do-autoreconf.diff \
+    file://testsuite-ignore-elflint.diff \
+    file://elf_additions.diff \
 	file://elfutils-fsize.patch \
 	file://remove-unused.patch \
 	file://mempcpy.patch \
@@ -35,7 +35,11 @@ SRC_URI += "\
 	file://elfutils-ar-c-fix-num-passed-to-memset.patch \
 	file://fix-build-gcc-4.8.patch \
 	file://fix-build-gcc-4.8-II.patch \
-        file://gcc6.patch \
+    file://gcc6.patch \
+    file://Fix_one_GCC7_warning.patch \
+    file://0001-Add-GCC7-Wimplicit-fallthrough-support-fixes.patch \
+    file://fallthrough.patch \
+    file://0002-Fix-Werror-format-truncation-by-increaing-buffers.patch \
 "
 # Only apply when building uclibc based target recipe
 SRC_URI_append_libc-uclibc = " file://uclibc-support.patch"
