@@ -1,0 +1,29 @@
+From 3ff852a84e9d61d11fbe7955298bb9f4b4e03305 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Andreas=20M=C3=BCller?= <schnitzeltony@gmail.com>
+Date: Mon, 18 Dec 2017 16:18:52 +0100
+Subject: [PATCH] texi2pod.pl: fox for perl >= 5.22
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Andreas Müller <schnitzeltony@gmail.com>
+---
+ scripts/texi2pod.pl | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/scripts/texi2pod.pl b/scripts/texi2pod.pl
+index 94097fb..afd954a 100755
+--- a/scripts/texi2pod.pl
++++ b/scripts/texi2pod.pl
+@@ -317,7 +317,7 @@ while(<$inf>) {
+ 	@columns = ();
+ 	for $column (split (/\s*\@tab\s*/, $1)) {
+ 	    # @strong{...} is used a @headitem work-alike
+-	    $column =~ s/^\@strong{(.*)}$/$1/;
++	    $column =~ s/address@hidden(.*)\}$/$1/;
+ 	    push @columns, $column;
+ 	}
+ 	$_ = "\n=item ".join (" : ", @columns)."\n";
+-- 
+2.14.3
+
