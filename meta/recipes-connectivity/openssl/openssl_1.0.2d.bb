@@ -47,6 +47,7 @@ SRC_URI += "file://configure-targets.patch \
             file://CVE-2016-0800.patch \
             file://CVE-2016-0800_2.patch \
             file://CVE-2016-0800_3.patch \
+            file://openssl-util-perlpath.pl-cwd.patch \
            "
 
 SRC_URI[md5sum] = "38dd619b2e77cbac69b99f52a053d25a"
