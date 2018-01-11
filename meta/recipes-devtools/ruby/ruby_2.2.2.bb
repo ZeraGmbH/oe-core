@@ -21,6 +21,7 @@ EXTRA_OECONF = "\
     --disable-dtrace \
     --enable-shared \
     --enable-load-relative \
+    --disable-install-doc \
 "
 
 EXTRA_OEMAKE = " \
