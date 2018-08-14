@@ -1,0 +1,143 @@
+commit 882d31bc0dbe20434d2b89aa92901374bb5e5666
+Author: Ross Burton <ross.burton@intel.com>
+Date:   Thu Sep 6 16:07:27 2018 +0100
+
+    mesa: disable LLVM on x86
+    
+    Whilst turning on the LLVM drivers is a honourable goal, the performance impact
+    is *huge*.  Instead let specific BSPs turn it on as required.
+    
+    Signed-off-by: Ross Burton <ross.burton@intel.com>
+    Signed-off-by: Richard Purdie <richard.purdie@linuxfoundation.org>
+
+commit a77eb44bb1ff2ece9dcff1f7b5fe671ea3ae034d
+Author: Otavio Salvador <otavio@ossystems.com.br>
+Date:   Thu Aug 30 14:27:37 2018 -0300
+
+    mesa: Upgrade 18.1.3 -> 18.1.7
+    
+    This upgrades mesa to the 18.1.7 stable release.
+    
+    The changes can be found at:
+    
+     https://www.mesa3d.org/relnotes/18.1.4.html
+     https://www.mesa3d.org/relnotes/18.1.5.html
+     https://www.mesa3d.org/relnotes/18.1.6.html
+     https://www.mesa3d.org/relnotes/18.1.7.html
+    
+    Signed-off-by: Otavio Salvador <otavio@ossystems.com.br>
+    Signed-off-by: Richard Purdie <richard.purdie@linuxfoundation.org>
+
+commit 9b0f7e3142c860c25234fb1fadcec136bf5dca90
+Author: Andreas Müller <schnitzeltony@gmail.com>
+Date:   Mon Aug 27 14:40:42 2018 +0200
+
+    mesa: 17.3.8 -> 18.1.3
+    
+    * taken from oe-core master
+    * usue *proto instead of xorgproto
+    
+    Signed-off-by: Andreas Müller <schnitzeltony@gmail.com>
+
+commit f8270871c34a5f36d3c8f76f528186002b0dc0bd
+Author: Khem Raj <raj.khem@gmail.com>
+Date:   Mon Aug 20 11:59:47 2018 -0700
+
+    mesa: Enable gallium-llvm on x86 and x86_64
+    
+    Signed-off-by: Khem Raj <raj.khem@gmail.com>
+    Signed-off-by: Richard Purdie <richard.purdie@linuxfoundation.org>
+
+commit c5a27bd4d450911afa38846bc00ef762e4414eda
+Author: Khem Raj <raj.khem@gmail.com>
+Date:   Sun Aug 19 10:23:38 2018 -0700
+
+    mesa: Define YOCTO_ALTERNATE_MULTILIB_NAME to consider multilib names
+    
+    Signed-off-by: Khem Raj <raj.khem@gmail.com>
+    Signed-off-by: Richard Purdie <richard.purdie@linuxfoundation.org>
+
+commit f3a59540d0d1f7ab42ba7cb5ff1a26ac3a8a9f68
+Author: Khem Raj <raj.khem@gmail.com>
+Date:   Tue Aug 14 11:34:40 2018 -0700
+
+    mesa: Disble TLS for musl
+    
+    See https://bugs.freedesktop.org/show_bug.cgi?id=35268
+    mesa should infact stop using __attribute__((tls_model("initial-exec")))
+    until then we disale TLS in glx for musl
+    The problem could happen even on glibc if static TLS sizes are large enough
+    which would mean that additional space the glibc leaves for such rogue libraries
+    get consumed and then same problems show up there as well
+    
+    Fixes errors seen in xorg logs e.g.
+    
+    (EE) Failed to load /usr/lib/xorg/modules/extensions/libglx.so: Error relocating /usr/lib/libGL.so.1: _ITM_deregisterTMCloneTable: initial-exec TLS resolves to dynamic definition in /usr/lib/libGL.so.1
+    
+    enable readonly text segment on x86 for musl
+    
+    Signed-off-by: Khem Raj <raj.khem@gmail.com>
+    Signed-off-by: Richard Purdie <richard.purdie@linuxfoundation.org>
+
+commit ff4762e94faa095abd7175810d1053fdd361058f
+Author: Khem Raj <raj.khem@gmail.com>
+Date:   Sun Jul 15 12:44:02 2018 -0700
+
+    mesa: Fix build with wayland and egl
+    
+    When wayland and egl both are on then it enables the wayland
+    plugin which actually fails to build because its not finding wayland-protocol
+    xml templates in proper location which is recipe sysroot since
+    we are cross compiling
+    
+    Fixes build errors e.g.
+    make[4]: *** No rule to make target `//usr/share/wayland-protocols/unstable/linux-dmabuf/linux-dmabuf-unstable-v1.xml', needed by `drivers/dri2/linux-dmabuf-unstable-v1-client-protocol.h'.  Stop.
+    make[4]: *** Waiting for unfinished jobs....
+    
+    Signed-off-by: Khem Raj <raj.khem@gmail.com>
+    Signed-off-by: Ross Burton <ross.burton@intel.com>
+
+commit db86b271c98dd50c641374ab6806b47a40ed134b
+Author: Ross Burton <ross.burton@intel.com>
+Date:   Wed Jul 11 19:14:11 2018 +0100
+
+    mesa: remove hardware float patch
+    
+    We don't need the texture float patches anymore, as the relevant patents have
+    expired so this defaults to on now.
+    
+    Signed-off-by: Ross Burton <ross.burton@intel.com>
+
+commit 8fb143fe69147c32e945e798662d78e606bfe0a0
+Author: Ross Burton <ross.burton@intel.com>
+Date:   Wed Jul 4 14:28:17 2018 +0100
+
+    mesa: patch cleanup
+    
+    0001-Makefile.vulkan.am-explictly-add-lib-expat-to-intel-.patch was fixed a
+    different way upstream so remove.
+    
+    0007-dri-i965-Add-missing-time.h-include.patch is now accepted upstream so mark
+    as backport.
+    
+    Signed-off-by: Ross Burton <ross.burton@intel.com>
+
+commit 4cb6e5c734341b9d1240814ffecd01f574e3c347
+Author: Ross Burton <ross.burton@intel.com>
+Date:   Wed Jul 4 10:21:50 2018 +0100
+
+    mesa: add lost Upstream-Status tag
+    
+    Signed-off-by: Ross Burton <ross.burton@intel.com>
+
+commit bff79adccf3b6d7e07abc965af96f9c1d499d309
+Author: Ross Burton <ross.burton@intel.com>
+Date:   Tue Jul 3 14:27:21 2018 +0100
+
+    mesa: enable surfaceless platform
+    
+    This platform is enabled by default but as we override the platform list doesn't
+    get enabled.
+    
+    Signed-off-by: Ross Burton <ross.burton@intel.com>
+    Signed-off-by: Richard Purdie <richard.purdie@linuxfoundation.org>

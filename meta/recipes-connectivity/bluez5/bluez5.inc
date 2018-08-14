@@ -112,10 +112,9 @@ FILES_${PN}-dev += " \
 "
 
 FILES_${PN}-obex = "${libexecdir}/bluetooth/obexd \
-                    ${exec_prefix}/lib/systemd/user/obex.service \
+                    ${systemd_user_unitdir}/obex.service \
                     ${datadir}/dbus-1/services/org.bluez.obex.service \
                    "
-SYSTEMD_SERVICE_${PN}-obex = "obex.service"
 
 FILES_${PN}-testtools = "${libdir}/bluez/test/*"
 
