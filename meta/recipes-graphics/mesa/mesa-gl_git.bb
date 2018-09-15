@@ -1,4 +1,4 @@
-require mesa_${PV}.bb
+require mesa_git.bb
 
 SUMMARY += " (OpenGL only, no EGL/GLES)"
 
