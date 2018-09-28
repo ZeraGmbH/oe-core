@@ -15,18 +15,6 @@ IMAGE_BUILDINFO_VARS ?= "DISTRO DISTRO_VERSION"
 # Desired location of the output file in the image.
 IMAGE_BUILDINFO_FILE ??= "${sysconfdir}/build"
 
-# From buildhistory.bbclass
-def image_buildinfo_outputvars(vars, listvars, d): 
-    vars = vars.split()
-    listvars = listvars.split()
-    ret = ""
-    for var in vars:
-        value = d.getVar(var) or ""
-        if (d.getVarFlag(var, 'type') == "list"):
-            value = oe.utils.squashspaces(value)
-        ret += "%s = %s\n" % (var, value)
-    return ret.rstrip('\n')
-
 # Gets git branch's status (clean or dirty)
 def get_layer_git_status(path):
     import subprocess
@@ -57,10 +45,18 @@ def buildinfo_target(d):
         # Get context
         if d.getVar('BB_WORKERCONTEXT') != '1':
                 return ""
-        # Single and list variables to be read
-        vars = (d.getVar("IMAGE_BUILDINFO_VARS") or "")
-        listvars = (d.getVar("IMAGE_BUILDINFO_LVARS") or "")
-        return image_buildinfo_outputvars(vars, listvars, d)
+        # taken from base.bbclass
+        localdata = bb.data.createCopy(d)
+        statuslines = []
+        g = globals()
+        func = 'buildcfg_vars'
+        if func not in g:
+            bb.warn("Build configuration function '%s' does not exist" % func)
+        else:
+            flines = g[func](localdata)
+            if flines:
+                statuslines.extend(flines)
+        return ('\n%s\n' % '\n'.join(statuslines))
 
 # Write build information to target filesystem
 python buildinfo () {
