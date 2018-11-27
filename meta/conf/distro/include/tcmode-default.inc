@@ -60,6 +60,8 @@ PREFERRED_VERSION_e2fsprogs                ?= "1.42.1"
 PREFERRED_VERSION_e2fsprogs-native         ?= "1.42.9"
 PREFERRED_VERSION_libgpg-error             ?= "1.10"
 PREFERRED_VERSION_libgpg-error-native      ?= "1.19"
+PREFERRED_VERSION_pixman                   ?= "0.28.2"
+PREFERRED_VERSION_pixman-native            ?= "0.32.6"
 
 
 # don't use version earlier than 1.4 for gzip-native, as it's necessary for
