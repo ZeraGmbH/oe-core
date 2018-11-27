@@ -59,3 +59,8 @@ PREFERRED_VERSION_gzip-native ?= "1.5"
 # Setup suitable toolchain flags
 require conf/distro/include/as-needed.inc
 
+
+# zera-autobuilder was updated and needs now some more modern native components
+PREFERRED_VERSION_cairo                    ?= "1.12.8"
+PREFERRED_VERSION_cairo-native             ?= "1.14.2"
+
