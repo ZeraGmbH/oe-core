@@ -54,6 +54,8 @@ PREFERRED_VERSION_uclibc-initial           ?= "${UCLIBCVERSION}"
 
 PREFERRED_VERSION_automake                 ?= "1.12.6"
 PREFERRED_VERSION_automake-native          ?= "1.15"
+PREFERRED_VERSION_lzo                      ?= "2.06"
+PREFERRED_VERSION_lzo-native               ?= "2.09"
 
 
 # don't use version earlier than 1.4 for gzip-native, as it's necessary for
