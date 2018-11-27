@@ -1,7 +1,7 @@
 require eglibc_${PV}.bb
 require eglibc-initial.inc
 
-DEPENDS += "kconfig-frontends-native"
+DEPENDS += "kconfig-frontends-native make-native"
 
 # main eglibc recipes muck with TARGET_CPPFLAGS to point into
 # final target sysroot but we
