@@ -1,0 +1,39 @@
+From 81f162ab34c79236c243b9eed876a57ef918d417 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Andreas=20M=C3=BCller?= <schnitzeltony@gmail.com>
+Date: Tue, 27 Nov 2018 17:52:04 +0100
+Subject: [PATCH] Fix build on later gccs
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Andreas Müller <schnitzeltony@gmail.com>
+---
+ gcc/cp/cfns.h | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/gcc/cp/cfns.h b/gcc/cp/cfns.h
+index ef1ed08..5773a3d 100644
+--- a/gcc/cp/cfns.h
++++ b/gcc/cp/cfns.h
+@@ -53,6 +53,9 @@ __inline
+ static unsigned int hash (const char *, unsigned int);
+ #ifdef __GNUC__
+ __inline
++#ifdef __GNUC_STDC_INLINE__
++__attribute__ ((__gnu_inline__))
++#endif
+ #endif
+ const char * libc_name_p (const char *, unsigned int);
+ /* maximum key range = 391, duplicates = 0 */
+@@ -96,7 +99,7 @@ hash (register const char *str, register
+       400, 400, 400, 400, 400, 400, 400, 400, 400, 400,
+       400, 400, 400, 400, 400, 400, 400
+     };
+-  register int hval = len;
++  register int hval = (int) len;
+ 
+   switch (hval)
+     {
+-- 
+2.14.5
+

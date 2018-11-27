@@ -78,6 +78,7 @@ SRC_URI = "${GNU_MIRROR}/gcc/gcc-${PV}/gcc-${PV}.tar.bz2 \
 	   file://wcast-qual-PR55383.patch \
 	   file://disable-texinfo-5.patch \
 	   file://avoid-oob-array-access.patch \
+       file://0001-Fix-build-on-later-gccs.patch \
 	  "
 SRC_URI[md5sum] = "cc308a0891e778cfda7a151ab8a6e762"
 SRC_URI[sha256sum] = "8a9283d7010fb9fe5ece3ca507e0af5c19412626384f8a5e9434251ae100b084"
