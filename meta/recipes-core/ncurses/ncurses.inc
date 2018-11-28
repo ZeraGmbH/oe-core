@@ -25,9 +25,13 @@ ENABLE_WIDEC ?= "true"
 # for target objects.  But it must be set manually for native and sdk
 # builds.
 BUILD_CPPFLAGS += "-D_GNU_SOURCE"
+CPPFLAGS_append_class-native = " -P"
 
 # natives don't generally look in base_libdir
 base_libdir_class-native = "${libdir}"
+
+CONFFLAGS_RECENT_FIX = ""
+CONFFLAGS_RECENT_FIX_class-native = "--without-cxx-binding"
 
 # Helper function for do_configure to allow multiple configurations
 # $1 the directory to run configure in
@@ -55,6 +59,7 @@ ncurses_configure() {
 	        --enable-pc-files \
 	        --disable-rpath-hack \
 	        --with-manpage-format=normal \
+            ${CONFFLAGS_RECENT_FIX} \
 	        "$@" || return 1
 	cd ..
 }
