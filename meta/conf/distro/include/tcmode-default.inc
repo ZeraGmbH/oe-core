@@ -62,6 +62,8 @@ PREFERRED_VERSION_libgpg-error             ?= "1.10"
 PREFERRED_VERSION_libgpg-error-native      ?= "1.19"
 PREFERRED_VERSION_pixman                   ?= "0.28.2"
 PREFERRED_VERSION_pixman-native            ?= "0.32.6"
+PREFERRED_VERSION_libgcrypt                ?= "1.5.0"
+PREFERRED_VERSION_libgcrypt-native         ?= "1.6.3"
 
 
 # don't use version earlier than 1.4 for gzip-native, as it's necessary for
