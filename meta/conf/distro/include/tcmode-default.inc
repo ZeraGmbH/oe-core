@@ -70,6 +70,8 @@ PREFERRED_VERSION_cairo                    ?= "1.12.8"
 PREFERRED_VERSION_cairo-native             ?= "1.14.2"
 PREFERRED_VERSION_neon                     ?= "0.29.6"
 PREFERRED_VERSION_neon-native              ?= "0.30.1"
+PREFERRED_VERSION_subversion               ?= "1.7.8"
+PREFERRED_VERSION_subversion-native        ?= "1.8.13"
 
 
 # don't use version earlier than 1.4 for gzip-native, as it's necessary for
