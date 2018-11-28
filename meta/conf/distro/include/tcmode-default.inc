@@ -68,6 +68,8 @@ PREFERRED_VERSION_gnutls                   ?= "2.12.21"
 PREFERRED_VERSION_gnutls-native            ?= "3.3.17.1"
 PREFERRED_VERSION_cairo                    ?= "1.12.8"
 PREFERRED_VERSION_cairo-native             ?= "1.14.2"
+PREFERRED_VERSION_neon                     ?= "0.29.6"
+PREFERRED_VERSION_neon-native              ?= "0.30.1"
 
 
 # don't use version earlier than 1.4 for gzip-native, as it's necessary for
