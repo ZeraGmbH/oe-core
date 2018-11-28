@@ -17,7 +17,8 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=5f30f0716dfdd0d91eb439ebec522ec2 \
                     file://tests/testgtk.c;endline=25;md5=cb732daee1d82af7a2bf953cf3cf26f1"
 
 SRC_URI = "http://download.gnome.org/sources/gtk+/3.4/gtk+-${PV}.tar.xz \
-           file://cross.patch"
+           file://cross.patch \
+           file://0001-geninclude.pl-fix-for-recent-perl.patch"
 SRC_URI[md5sum] = "1b2cf29502a6394e8d4b30f7f5bb9131"
 SRC_URI[sha256sum] = "f154e460075034da4c0ce89c320025dcd459da2a1fdf32d92a09522eaca242c7"
 
