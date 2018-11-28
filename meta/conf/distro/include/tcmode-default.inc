@@ -64,6 +64,8 @@ PREFERRED_VERSION_pixman                   ?= "0.28.2"
 PREFERRED_VERSION_pixman-native            ?= "0.32.6"
 PREFERRED_VERSION_libgcrypt                ?= "1.5.0"
 PREFERRED_VERSION_libgcrypt-native         ?= "1.6.3"
+PREFERRED_VERSION_gnutls                   ?= "2.12.21"
+PREFERRED_VERSION_gnutls-native            ?= "3.3.17.1"
 
 
 # don't use version earlier than 1.4 for gzip-native, as it's necessary for
