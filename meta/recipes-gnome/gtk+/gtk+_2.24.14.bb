@@ -15,6 +15,7 @@ SRC_URI = "http://download.gnome.org/sources/gtk+/2.24/gtk+-${PV}.tar.xz \
            file://doc-fixes.patch \
            file://0001-GtkButton-do-not-prelight-in-touchscreen-mode.patch \
            file://obsolete_automake_macros.patch \
+           file://0001-geninclude.pl-fix-for-recent-perl.patch \
 	  "
 
 # TO MERGE
