@@ -6,13 +6,17 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
+Upstream-Status: Applied [1]
+
+[1] https://github.com/qemu/qemu/commit/aa5ccadcca3e6018ebd9d2e8b0a0604f7cb0cd59
+
 Signed-off-by: Andreas Müller <schnitzeltony@gmail.com>
 ---
  scripts/texi2pod.pl | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/scripts/texi2pod.pl b/scripts/texi2pod.pl
-index 94097fb..afd954a 100755
+index 94097fb..8767662 100755
 --- a/scripts/texi2pod.pl
 +++ b/scripts/texi2pod.pl
 @@ -317,7 +317,7 @@ while(<$inf>) {
@@ -20,10 +24,10 @@ index 94097fb..afd954a 100755
  	for $column (split (/\s*\@tab\s*/, $1)) {
  	    # @strong{...} is used a @headitem work-alike
 -	    $column =~ s/^\@strong{(.*)}$/$1/;
-+	    $column =~ s/address@hidden(.*)\}$/$1/;
++	    $column =~ s/^\@strong\{(.*)\}$/$1/;
  	    push @columns, $column;
  	}
  	$_ = "\n=item ".join (" : ", @columns)."\n";
 -- 
-2.14.3
+2.14.5
 
