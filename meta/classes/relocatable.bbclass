@@ -13,7 +13,7 @@ relocatable_native_pcfiles() {
 		files=$(echo $files_template)
 		# $files_template and $files will differ if any files were found
 		if [ "$files_template" != "$files" ]; then
-			rel=$(realpath -m --relative-to=$dir ${base_prefix})
+			rel=$(realpath --relative-to=$dir ${base_prefix})
 			sed -i -e "s:${base_prefix}:\${pcfiledir}/$rel:g" $files
 		fi
 	done
