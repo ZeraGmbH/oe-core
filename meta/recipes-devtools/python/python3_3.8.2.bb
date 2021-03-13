@@ -1,5 +1,6 @@
 SUMMARY = "The Python Programming Language"
 HOMEPAGE = "http://www.python.org"
+DESCRIPTION = "Python is a programming language that lets you work more quickly and integrate your systems more effectively."
 LICENSE = "PSFv2"
 SECTION = "devel/python"
 
@@ -33,8 +34,11 @@ SRC_URI = "http://www.python.org/ftp/python/${PV}/Python-${PV}.tar.xz \
            file://0001-python3-Do-not-hardcode-lib-for-distutils.patch \
            file://0020-configure.ac-setup.py-do-not-add-a-curses-include-pa.patch \
            file://0001-bpo-39503-CVE-2020-8492-Fix-AbstractBasicAuthHandler.patch \
+           file://CVE-2019-20907.patch \
            file://CVE-2020-14422.patch \
            file://CVE-2020-26116.patch \
+           file://CVE-2020-27619.patch \
+           file://CVE-2021-3177.patch \
            "
 
 SRC_URI_append_class-native = " \
@@ -51,8 +55,13 @@ UPSTREAM_CHECK_REGEX = "[Pp]ython-(?P<pver>\d+(\.\d+)+).tar"
 
 CVE_PRODUCT = "python"
 
+# Upstream consider this expected behaviour
+CVE_CHECK_WHITELIST += "CVE-2007-4559"
 # This is not exploitable when glibc has CVE-2016-10739 fixed.
 CVE_CHECK_WHITELIST += "CVE-2019-18348"
+
+# This is windows only issue.
+CVE_CHECK_WHITELIST += "CVE-2020-15523"
 
 PYTHON_MAJMIN = "3.8"
 
@@ -305,11 +314,8 @@ do_create_manifest() {
 }
 
 # bitbake python -c create_manifest
-addtask do_create_manifest
-
 # Make sure we have native python ready when we create a new manifest
-do_create_manifest[depends] += "${PN}:do_prepare_recipe_sysroot"
-do_create_manifest[depends] += "${PN}:do_patch"
+addtask do_create_manifest after do_patch do_prepare_recipe_sysroot
 
 # manual dependency additions
 RRECOMMENDS_${PN}-core_append_class-nativesdk = " nativesdk-python3-modules"
@@ -353,3 +359,9 @@ RDEPENDS_${PN}-dev = ""
 
 RDEPENDS_${PN}-tests_append_class-target = " bash"
 RDEPENDS_${PN}-tests_append_class-nativesdk = " bash"
+
+# Python's tests contain large numbers of files we don't need in the recipe sysroots
+SYSROOT_PREPROCESS_FUNCS += " py3_sysroot_cleanup"
+py3_sysroot_cleanup () {
+	rm -rf ${SYSROOT_DESTDIR}${libdir}/python${PYTHON_MAJMIN}/test
+}
