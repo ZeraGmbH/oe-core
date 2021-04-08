@@ -9,8 +9,8 @@ SRC_URI = "https://mesa.freedesktop.org/archive/mesa-${PV}.tar.xz \
            file://0001-meson-misdetects-64bit-atomics-on-mips-clang.patch \
            "
 
-SRC_URI[md5sum] = "20e0e74622a81342ae84e6a631309249"
-SRC_URI[sha256sum] = "6cf0c010df89680f9b2bc6432ff01400031795e39bceda7535fa00af06740b6c"
+SRC_URI[md5sum] = "31ca59cd92c38cb8e1a58b62b01c3e08"
+SRC_URI[sha256sum] = "aa54f1cb669550606aab8ceb475105d15aeb814fca5a778ce70d0fd10e98e86f"
 
 UPSTREAM_CHECK_GITTAGREGEX = "mesa-(?P<pver>\d+(\.\d+)+)"
 
