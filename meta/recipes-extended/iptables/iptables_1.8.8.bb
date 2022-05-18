@@ -3,7 +3,7 @@ DESCRIPTION = "iptables is the userspace command line program used to configure 
 filtering code in Linux."
 HOMEPAGE = "http://www.netfilter.org/"
 BUGTRACKER = "http://bugzilla.netfilter.org/"
-LICENSE = "GPLv2+"
+LICENSE = "GPL-2.0-or-later"
 LIC_FILES_CHKSUM = "file://COPYING;md5=b234ee4d69f5fce4486a80fdaf4a4263 \
                     file://iptables/iptables.c;beginline=13;endline=25;md5=c5cffd09974558cf27d0f763df2a12dc \
 "
@@ -12,14 +12,16 @@ SRC_URI = "http://netfilter.org/projects/iptables/files/iptables-${PV}.tar.bz2 \
            file://0001-configure-Add-option-to-enable-disable-libnfnetlink.patch \
            file://0001-Makefile.am-do-not-install-etc-ethertypes.patch \
            file://0002-configure.ac-only-check-conntrack-when-libnfnetlink-enabled.patch \
+           file://format-security.patch \
            file://iptables.service \
            file://iptables.rules \
            file://ip6tables.service \
            file://ip6tables.rules \
+           file://0001-iptables-xshared.h-add-missing-sys.types.h-include.patch \
            "
-SRC_URI[sha256sum] = "c109c96bb04998cd44156622d36f8e04b140701ec60531a10668cfdff5e8d8f0"
+SRC_URI[sha256sum] = "71c75889dc710676631553eb1511da0177bbaaf1b551265b912d236c3f51859f"
 
-SYSTEMD_SERVICE_${PN} = "\
+SYSTEMD_SERVICE:${PN} = "\
     iptables.service \
     ${@bb.utils.contains('PACKAGECONFIG', 'ipv6', 'ip6tables.service', '', d)} \
 "
@@ -27,6 +29,8 @@ SYSTEMD_SERVICE_${PN} = "\
 inherit autotools pkgconfig systemd
 
 EXTRA_OECONF = "--with-kernel=${STAGING_INCDIR}"
+
+CFLAGS:append:libc-musl = " -D__UAPI_DEF_ETHHDR=0"
 
 PACKAGECONFIG ?= "${@bb.utils.filter('DISTRO_FEATURES', 'ipv6', d)}"
 PACKAGECONFIG[ipv6] = "--enable-ipv6,--disable-ipv6,"
@@ -37,15 +41,18 @@ PACKAGECONFIG[libnfnetlink] = "--enable-libnfnetlink,--disable-libnfnetlink,libn
 # libnftnl recipe is in meta-networking layer(previously known as libnftables)
 PACKAGECONFIG[libnftnl] = "--enable-nftables,--disable-nftables,libnftnl"
 
-do_configure_prepend() {
+do_configure:prepend() {
     # Remove some libtool m4 files
     # Keep ax_check_linker_flags.m4 which belongs to autoconf-archive.
     rm -f libtool.m4 lt~obsolete.m4 ltoptions.m4 ltsugar.m4 ltversion.m4
+
+    # Copy a header to fix out of tree builds
+    cp -f ${S}/libiptc/linux_list.h ${S}/include/libiptc/
 }
 
 IPTABLES_RULES_DIR ?= "${sysconfdir}/${BPN}"
 
-do_install_append() {
+do_install:append() {
     install -d ${D}${IPTABLES_RULES_DIR}
     install -m 0644 ${WORKDIR}/iptables.rules ${D}${IPTABLES_RULES_DIR}
 
@@ -76,15 +83,15 @@ do_install_append() {
 PACKAGES =+ "${PN}-modules ${PN}-apply"
 PACKAGES_DYNAMIC += "^${PN}-module-.*"
 
-python populate_packages_prepend() {
+python populate_packages:prepend() {
     modules = do_split_packages(d, '${libdir}/xtables', r'lib(.*)\.so$', '${PN}-module-%s', '${PN} module %s', extra_depends='')
     if modules:
         metapkg = d.getVar('PN') + '-modules'
-        d.appendVar('RDEPENDS_' + metapkg, ' ' + ' '.join(modules))
+        d.appendVar('RDEPENDS:' + metapkg, ' ' + ' '.join(modules))
 }
 
-RDEPENDS_${PN} = "${PN}-module-xt-standard"
-RRECOMMENDS_${PN} = " \
+RDEPENDS:${PN} = "${PN}-module-xt-standard"
+RRECOMMENDS:${PN} = " \
     ${PN}-modules \
     kernel-module-x-tables \
     kernel-module-ip-tables \
@@ -101,16 +108,16 @@ RRECOMMENDS_${PN} = " \
     ', '', d)} \
 "
 
-FILES_${PN} += "${datadir}/xtables"
+FILES:${PN} += "${datadir}/xtables"
 
-FILES_${PN}-apply = "${sbindir}/ip*-apply"
-RDEPENDS_${PN}-apply = "${PN} bash"
+FILES:${PN}-apply = "${sbindir}/ip*-apply"
+RDEPENDS:${PN}-apply = "${PN} bash"
 
 # Include the symlinks as well in respective packages
-FILES_${PN}-module-xt-conntrack += "${libdir}/xtables/libxt_state.so"
-FILES_${PN}-module-xt-ct += "${libdir}/xtables/libxt_NOTRACK.so"
+FILES:${PN}-module-xt-conntrack += "${libdir}/xtables/libxt_state.so"
+FILES:${PN}-module-xt-ct += "${libdir}/xtables/libxt_NOTRACK.so ${libdir}/xtables/libxt_REDIRECT.so"
 
-ALLOW_EMPTY_${PN}-modules = "1"
+ALLOW_EMPTY:${PN}-modules = "1"
 
-INSANE_SKIP_${PN}-module-xt-conntrack = "dev-so"
-INSANE_SKIP_${PN}-module-xt-ct = "dev-so"
+INSANE_SKIP:${PN}-module-xt-conntrack = "dev-so"
+INSANE_SKIP:${PN}-module-xt-ct = "dev-so"
