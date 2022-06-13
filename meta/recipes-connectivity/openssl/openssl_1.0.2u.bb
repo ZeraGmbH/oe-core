@@ -49,10 +49,6 @@ SRC_URI_append_class-target = " \
            file://reproducible-mkbuildinf.patch \
            "
 
-SRC_URI_append_class-nativesdk = " \
-           file://environment.d-openssl.sh \
-           "
-
 SRC_URI[md5sum] = "cdc2638f789ecc2db2c91488265686c1"
 SRC_URI[sha256sum] = "ecd0c6ffb493dd06707d38b14bb4d8c2288bb7033735606569d8f90f89669d16"
 
@@ -266,11 +262,6 @@ do_install_append_class-native () {
 	    SSL_CERT_DIR=${libdir}/ssl/certs \
 	    SSL_CERT_FILE=${libdir}/ssl/cert.pem \
 	    OPENSSL_ENGINES=${libdir}/ssl/engines
-}
-
-do_install_append_class-nativesdk () {
-	mkdir -p ${D}${SDKPATHNATIVE}/environment-setup.d
-	install -m 644 ${WORKDIR}/environment.d-openssl.sh ${D}${SDKPATHNATIVE}/environment-setup.d/openssl.sh
 }
 
 do_install_ptest () {
