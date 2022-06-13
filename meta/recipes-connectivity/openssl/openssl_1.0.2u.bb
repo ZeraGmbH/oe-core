@@ -244,16 +244,6 @@ do_install () {
 	ln -sf ${@oe.path.relative('${libdir}/ssl', '${sysconfdir}/ssl/certs')} ${D}${libdir}/ssl/certs
 	ln -sf ${@oe.path.relative('${libdir}/ssl', '${sysconfdir}/ssl/private')} ${D}${libdir}/ssl/private
 	ln -sf ${@oe.path.relative('${libdir}/ssl', '${sysconfdir}/ssl/openssl.cnf')} ${D}${libdir}/ssl/openssl.cnf
-
-	# Rename man pages to prefix openssl10-*
-	for f in `find ${D}${mandir} -type f`; do
-	    mv $f $(dirname $f)/openssl10-$(basename $f)
-	done
-	for f in `find ${D}${mandir} -type l`; do
-	    ln_f=`readlink $f`
-	    rm -f $f
-	    ln -s openssl10-$ln_f $(dirname $f)/openssl10-$(basename $f)
-	done
 }
 
 do_install_append_class-native () {
@@ -317,20 +307,20 @@ do_install_ptest () {
 # file to be installed for both the base openssl package and the libcrypto
 # package since the base openssl package depends on the libcrypto package.
 
-PACKAGES =+ "libcrypto10 libssl10 openssl10-conf ${PN}-engines ${PN}-misc"
+PACKAGES =+ "libcrypto libssl openssl-conf ${PN}-engines ${PN}-misc"
 
-FILES_libcrypto10 = "${libdir}/libcrypto${SOLIBS}"
-FILES_libssl10 = "${libdir}/libssl${SOLIBS}"
-FILES_openssl10-conf = "${sysconfdir}/ssl/openssl.cnf"
+FILES_libcrypto = "${libdir}/libcrypto${SOLIBS}"
+FILES_libssl = "${libdir}/libssl${SOLIBS}"
+FILES_openssl-conf = "${sysconfdir}/ssl/openssl.cnf"
 FILES_${PN}-engines = "${libdir}/ssl/engines/*.so ${libdir}/engines"
 FILES_${PN}-misc = "${libdir}/ssl/misc"
 FILES_${PN} =+ "${libdir}/ssl/*"
 FILES_${PN}_append_class-nativesdk = " ${SDKPATHNATIVE}/environment-setup.d/openssl.sh"
 FILES_${PN}-dbg += "${libdir}/ssl/engines/.debug"
 
-CONFFILES_openssl10-conf = "${sysconfdir}/ssl/openssl.cnf"
+CONFFILES_openssl-conf = "${sysconfdir}/ssl/openssl.cnf"
 
-RRECOMMENDS_libcrypto10 += "openssl10-conf"
+RRECOMMENDS_libcrypto += "openssl-conf"
 RDEPENDS_${PN}-misc = "${@bb.utils.filter('PACKAGECONFIG', 'perl', d)}"
 RDEPENDS_${PN}-ptest += "${PN}-misc make perl perl-module-filehandle bc"
 
