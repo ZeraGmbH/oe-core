@@ -20,7 +20,7 @@ SRC_URI[sha256sum] = "bab887d6280f47fc3963df3b95735a27a16f0f663636163ddf3acab5f1
 
 SRC_URI_append_libc-uclibc = " file://pam-no-innetgr.patch"
 
-DEPENDS = "bison flex flex-native cracklib"
+DEPENDS = "bison flex flex-native cracklib libxcrypt"
 
 EXTRA_OECONF = "--with-db-uniquename=_pam \
                 --includedir=${includedir}/security \
