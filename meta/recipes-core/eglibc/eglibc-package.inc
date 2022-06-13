@@ -80,6 +80,10 @@ do_install_append () {
 		sed -i -e '1s,#!.*perl,#! ${USRBINPATH}/env perl,' -e '2s,exec.*perl,exec ${USRBINPATH}/env perl,' ${D}${bindir}/mtrace
 	fi
 	rm -rf ${D}${includedir}/rpcsvc/rquota*
+
+	# supported by libxcrypt
+	rm -f ${D}${base_libdir}/libcrypt*.*
+	rm -rf ${D}${includedir}/crypt.h
 }
 
 do_install_locale () {
