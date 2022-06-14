@@ -22,7 +22,7 @@ PV = "2.1.0"
 PR = "r0"
 PE = "2"
 
-SRC_URI = "git://git.lttng.org/lttng-ust.git;protocol=git"
+SRC_URI = "git://github.com/lttng/lttng-ust.git;protocol=https;branch=master"
 
 S = "${WORKDIR}/git"
 
