@@ -8,6 +8,7 @@ DEPENDS = "flex-native bison-native"
 SRC_URI = "git://git.kernel.org/pub/scm/utils/dtc/dtc.git \
            file://make_install.patch \
            file://0001-checks-Use-proper-format-modifier-for-size_t.patch \
+           file://0002-Remove-redundant-YYLOC-global-declaration.patch \
            "
 UPSTREAM_CHECK_GITTAGREGEX = "v(?P<pver>\d+(\.\d+)+)"
 
