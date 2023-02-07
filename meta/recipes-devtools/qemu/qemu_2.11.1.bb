@@ -33,6 +33,9 @@ SRC_URI_append_class-native = " \
             file://0014-fix-libcap-header-issue-on-some-distro.patch \
             file://0015-cpus.c-Add-error-messages-when-qemi_cpu_kick_thread-.patch \
             file://0016-Fix-build-with-recent-linux-headers.patch \
+            file://0001-linux-user-assume-__NR_gettid-always-exists.patch \
+            file://0001-linux-user-rename-gettid-to-sys_gettid-to-avoid-clas.patch \
+            file://0001-Fix-build-with-glibc-2.31.patch \
             "
 
 SRC_URI[md5sum] = "61cf862b6007eba4ac98247776af2e27"

@@ -1,0 +1,35 @@
+From a33517cfa0562f771b449e850392ae7ef99705e8 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Andreas=20M=C3=BCller?= <schnitzeltony@gmail.com>
+Date: Tue, 7 Feb 2023 17:20:08 +0100
+Subject: [PATCH] Fix build with glibc 2.31
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Andreas Müller <schnitzeltony@gmail.com>
+---
+ linux-user/syscall.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/linux-user/syscall.c b/linux-user/syscall.c
+index 262ecba..cd6310e 100644
+--- a/linux-user/syscall.c
++++ b/linux-user/syscall.c
+@@ -8174,10 +8174,11 @@ abi_long do_syscall(void *cpu_env, int num, abi_long arg1,
+ #ifdef TARGET_NR_stime /* not on alpha */
+     case TARGET_NR_stime:
+         {
+-            time_t host_time;
+-            if (get_user_sal(host_time, arg1))
++            struct timespec ts;
++            ts.tv_nsec = 0;
++            if (get_user_sal(ts.tv_sec, arg1))
+                 goto efault;
+-            ret = get_errno(stime(&host_time));
++            ret = get_errno(clock_settime(CLOCK_REALTIME, &ts));
+         }
+         break;
+ #endif
+-- 
+2.39.1
+
