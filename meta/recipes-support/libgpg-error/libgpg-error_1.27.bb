@@ -13,6 +13,7 @@ SECTION = "libs"
 
 UPSTREAM_CHECK_URI = "https://gnupg.org/download/index.html"
 SRC_URI = "${GNUPG_MIRROR}/libgpg-error/libgpg-error-${PV}.tar.bz2 \
+           file://0001-awk-Prepare-for-Gawk-5.0.patch \
            file://pkgconfig.patch \
 	  "
 
