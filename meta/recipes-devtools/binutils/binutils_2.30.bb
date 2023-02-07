@@ -20,6 +20,8 @@ EXTRA_OECONF_class-native = "--enable-targets=all \
                              --enable-install-libbfd \
                              --disable-werror"
 
+CFLAGS_append_class-native = " -fcommon"
+
 do_install_class-native () {
 	autotools_do_install
 
