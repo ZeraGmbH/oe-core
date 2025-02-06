@@ -123,6 +123,7 @@ FILES:${PN} += " \
     ${libdir}/bluetooth/plugins/*.so \
     ${systemd_unitdir}/ ${datadir}/dbus-1 \
     ${libdir}/cups \
+    ${exec_prefix}/lib/systemd/user/mpris-proxy.service \
 "
 FILES:${PN}-dev += " \
     ${libdir}/bluetooth/plugins/*.la \
@@ -130,6 +131,7 @@ FILES:${PN}-dev += " \
 
 FILES:${PN}-obex = "${libexecdir}/bluetooth/obexd \
                     ${exec_prefix}/lib/systemd/user/obex.service \
+                    ${exec_prefix}/lib/systemd/user/dbus-org.bluez.obex.service \
                     ${systemd_system_unitdir}/obex.service \
                     ${sysconfdir}/systemd/system/multi-user.target.wants/obex.service \
                     ${datadir}/dbus-1/services/org.bluez.obex.service \
