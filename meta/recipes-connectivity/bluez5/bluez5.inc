@@ -70,6 +70,7 @@ SRC_URI = "${KERNELORG_MIRROR}/linux/bluetooth/bluez-${PV}.tar.xz \
            file://0001-tests-add-a-target-for-building-tests-without-runnin.patch \
            file://0001-test-gatt-Fix-hung-issue.patch \
            file://0001-gdbus-define-MAX_INPUT-for-musl.patch \
+           file://0001-plugin-Quiet-start-up-warnings.patch \
            "
 S = "${WORKDIR}/bluez-${PV}"
 

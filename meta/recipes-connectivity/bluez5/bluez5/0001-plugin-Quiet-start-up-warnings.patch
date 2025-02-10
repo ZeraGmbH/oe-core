@@ -1,0 +1,35 @@
+From 252883241228f3149566f119336ce2c49a8d861e Mon Sep 17 00:00:00 2001
+From: Bastien Nocera <hadess@hadess.net>
+Date: Wed, 27 Nov 2024 12:49:53 +0100
+Subject: [PATCH] plugin: Quiet start-up warnings
+
+It's not an error for a plug-in not to start if the hardware doesn't
+support it. Quiet the warnings that require specific hardware.
+The messages will still appear in the debug output.
+
+bluetoothd[896]: src/plugin.c:plugin_init() System does not support csip plugin
+bluetoothd[896]: src/plugin.c:plugin_init() System does not support micp plugin
+bluetoothd[896]: src/plugin.c:plugin_init() System does not support vcp plugin
+bluetoothd[896]: src/plugin.c:plugin_init() System does not support mcp plugin
+bluetoothd[896]: src/plugin.c:plugin_init() System does not support bass plugin
+bluetoothd[896]: src/plugin.c:plugin_init() System does not support bap plugin
+---
+ src/plugin.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/plugin.c b/src/plugin.c
+index e6d05be4c..00d3d7b6a 100644
+--- a/src/plugin.c
++++ b/src/plugin.c
+@@ -50,7 +50,7 @@ static int init_plugin(const struct bluetooth_plugin_desc *desc)
+ 	err = desc->init();
+ 	if (err < 0) {
+ 		if (err == -ENOSYS || err == -ENOTSUP)
+-			warn("System does not support %s plugin",
++			DBG("System does not support %s plugin",
+ 						desc->name);
+ 		else
+ 			error("Failed to init %s plugin",
+-- 
+2.48.1
+
