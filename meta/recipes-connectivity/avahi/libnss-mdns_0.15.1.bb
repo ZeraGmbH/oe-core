@@ -3,27 +3,27 @@ HOMEPAGE = "https://github.com/lathiat/nss-mdns"
 DESCRIPTION = "nss-mdns is a plugin for the GNU Name Service Switch (NSS) functionality of the GNU C Library (glibc) providing host name resolution via Multicast DNS (aka Zeroconf, aka Apple Rendezvous, aka Apple Bonjour), effectively allowing name resolution by common Unix/Linux programs in the ad-hoc mDNS domain .local."
 SECTION = "libs"
 
-LICENSE = "LGPLv2.1+"
+LICENSE = "LGPL-2.1-or-later"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=2d5025d4aa3495befef8f17206a5b0a1"
 
 DEPENDS = "avahi"
 
-SRC_URI = "git://github.com/lathiat/nss-mdns \
+SRC_URI = "git://github.com/lathiat/nss-mdns;branch=master;protocol=https \
            "
-
-SRCREV = "41c9c5e78f287ed4b41ac438c1873fa71bfa70ae"
-
+SRCREV = "4b3cfe818bf72d99a02b8ca8b8813cb2d6b40633"
 S = "${WORKDIR}/git"
 
 inherit autotools pkgconfig
 
-COMPATIBLE_HOST_libc-musl = 'null'
+COMPATIBLE_HOST:libc-musl = 'null'
+
+LDFLAGS += "${@bb.utils.contains('DISTRO_FEATURES', 'ld-is-lld', ' -Wl,--undefined-version', '', d)}"
 
 EXTRA_OECONF = "--libdir=${base_libdir}"
 
-RDEPENDS_${PN} = "avahi-daemon"
+RDEPENDS:${PN} = "avahi-daemon"
 
-pkg_postinst_${PN} () {
+pkg_postinst:${PN} () {
 	sed '
 		/^hosts:/ !b
 		/\<mdns\(4\|6\)\?\(_minimal\)\?\>/ b
@@ -31,7 +31,7 @@ pkg_postinst_${PN} () {
 		' -i $D${sysconfdir}/nsswitch.conf
 }
 
-pkg_prerm_${PN} () {
+pkg_prerm:${PN} () {
 	sed '
 		/^hosts:/ !b
 		s/[[:blank:]]\+mdns\(4\|6\)\?\(_minimal\( \[NOTFOUND=return\]\)\?\)\?//g
