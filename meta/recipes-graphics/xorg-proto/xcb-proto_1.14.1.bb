@@ -11,20 +11,18 @@ LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://COPYING;md5=d763b081cb10c223435b01e00dc0aba7 \
                     file://src/dri2.xml;beginline=2;endline=28;md5=f8763b13ff432e8597e0d610cf598e65"
 
-SRC_URI = "http://xcb.freedesktop.org/dist/${BP}.tar.bz2 \
-           file://0001-xcbgen-use-math-gcd-for-python-3-5.patch"
-SRC_URI[md5sum] = "abe9aa4886138150bbc04ae4f29b90e3"
-SRC_URI[sha256sum] = "7b98721e669be80284e9bbfeab02d2d0d54cd11172b72271e47a2fe875e2bde1"
+SRC_URI = "https://xorg.freedesktop.org/archive/individual/proto/${BP}.tar.xz"
+SRC_URI[sha256sum] = "f04add9a972ac334ea11d9d7eb4fc7f8883835da3e4859c9afa971efdf57fcc3"
 
 inherit autotools pkgconfig python3native
 
 PACKAGES += "python-xcbgen"
 
-FILES_${PN} = ""
-FILES_${PN}-dev += "${datadir}/xcb/*.xml ${datadir}/xcb/*.xsd"
-FILES_python-xcbgen = "${PYTHON_SITEPACKAGES_DIR}"
+FILES:${PN} = ""
+FILES:${PN}-dev += "${datadir}/xcb/*.xml ${datadir}/xcb/*.xsd"
+FILES:python-xcbgen = "${PYTHON_SITEPACKAGES_DIR}"
 
-RDEPENDS_${PN}-dev = ""
-RRECOMMENDS_${PN}-dbg = "${PN}-dev (= ${EXTENDPKGV})"
+RDEPENDS:${PN}-dev = ""
+RRECOMMENDS:${PN}-dbg = "${PN}-dev (= ${EXTENDPKGV})"
 
 BBCLASSEXTEND = "native nativesdk"
